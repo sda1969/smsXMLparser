@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane prefHeight="731.0" prefWidth="1156.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.ParserCtrl">
+   <children>
+      <HBox prefHeight="45.0" prefWidth="800.0" spacing="10.0">
+         <children>
+            <Button fx:id="loadBtn" mnemonicParsing="false" text="Загрузить файл" />
+            <Label text="Имя файла:">
+               <padding>
+                  <Insets top="5.0" />
+               </padding>
+            </Label>
+            <Label fx:id="fileNameLbl" text="Незагружен">
+               <padding>
+                  <Insets top="5.0" />
+               </padding>
+            </Label>
+         </children>
+         <padding>
+            <Insets left="10.0" top="10.0" />
+         </padding>
+      </HBox>
+      <TableView fx:id="smsTable" layoutX="6.0" layoutY="141.0" prefHeight="584.0" prefWidth="1134.0">
+        <columns>
+          <TableColumn fx:id="dateColumn" prefWidth="95.0" text="Дата" />
+          <TableColumn fx:id="paramColumn" prefWidth="143.0" text="Параметр" />
+            <TableColumn fx:id="fullColumn" editable="false" prefWidth="868.0" sortable="false" text="Полное сообщение" />
+        </columns>
+      </TableView>
+      <HBox layoutY="46.0" prefHeight="45.0" prefWidth="800.0" spacing="10.0">
+         <children>
+            <Label text="от Кого">
+               <padding>
+                  <Insets top="5.0" />
+               </padding></Label>
+            <ComboBox fx:id="addrCmb" prefWidth="150.0" />
+            <Label text="От">
+               <padding>
+                  <Insets top="5.0" />
+               </padding></Label>
+            <DatePicker fx:id="fromDateDP">
+               <HBox.margin>
+                  <Insets left="10.0" />
+               </HBox.margin></DatePicker>
+            <Label text="До">
+               <padding>
+                  <Insets top="5.0" />
+               </padding></Label>
+            <DatePicker fx:id="toDateDP" />
+         </children>
+         <padding>
+            <Insets left="10.0" top="10.0" />
+         </padding>
+      </HBox>
+      <HBox layoutY="79.0" prefHeight="45.0" prefWidth="1134.0" spacing="10.0">
+         <children>
+            <Button fx:id="searchBtn" mnemonicParsing="false" prefHeight="25.0" prefWidth="69.0" text="Поиск" />
+            <Label prefHeight="25.0" prefWidth="178.0" text="Регулярное выражение:">
+               <padding>
+                  <Insets top="4.0" />
+               </padding>
+            </Label>
+            <TextField fx:id="regVarTF" prefHeight="25.0" prefWidth="868.0">
+               <padding>
+                  <Insets top="3.0" />
+               </padding></TextField>
+         </children>
+         <padding>
+            <Insets left="10.0" top="10.0" />
+         </padding>
+      </HBox>
+      <Separator layoutX="-10.0" layoutY="126.0" prefHeight="5.0" prefWidth="800.0" />
+   </children>
+</AnchorPane>
