@@ -26,11 +26,11 @@
             <Insets left="10.0" top="10.0" />
          </padding>
       </HBox>
-      <TableView fx:id="smsTable" layoutX="6.0" layoutY="141.0" prefHeight="584.0" prefWidth="1134.0">
+      <TableView fx:id="smsTable" editable="true" layoutX="6.0" layoutY="141.0" prefHeight="584.0" prefWidth="1134.0">
         <columns>
           <TableColumn fx:id="dateColumn" prefWidth="95.0" text="Дата" />
           <TableColumn fx:id="paramColumn" prefWidth="143.0" text="Параметр" />
-            <TableColumn fx:id="fullColumn" editable="false" prefWidth="868.0" sortable="false" text="Полное сообщение" />
+            <TableColumn fx:id="fullColumn" editable="true" prefWidth="868.0" sortable="false" text="Полное сообщение" />
         </columns>
       </TableView>
       <HBox layoutY="46.0" prefHeight="45.0" prefWidth="800.0" spacing="10.0">
@@ -66,10 +66,7 @@
                   <Insets top="4.0" />
                </padding>
             </Label>
-            <TextField fx:id="regVarTF" prefHeight="25.0" prefWidth="868.0">
-               <padding>
-                  <Insets top="3.0" />
-               </padding></TextField>
+            <ComboBox fx:id="regexCmb" editable="true" prefHeight="25.0" prefWidth="858.0" />
          </children>
          <padding>
             <Insets left="10.0" top="10.0" />

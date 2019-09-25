@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -14,6 +15,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Observable;
 import java.util.Optional;
@@ -25,6 +27,7 @@ import java.util.regex.Pattern;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -32,10 +35,14 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableColumn.CellEditEvent;
+import javafx.scene.control.TablePosition;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.layout.AnchorPane;
+import javafx.util.StringConverter;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -58,6 +65,8 @@ public class ParserCtrl extends AnchorPane implements Initializable {
 	@FXML
 	private ComboBox<String> addrCmb;
 	@FXML
+	private ComboBox<String> regexCmb;
+	@FXML
 	private TableView<SMSitem> smsTable;
 	@FXML
 	private TableColumn<SMSitem, String> dateColumn;
@@ -73,8 +82,6 @@ public class ParserCtrl extends AnchorPane implements Initializable {
 	private DatePicker fromDateDP;
 	@FXML
 	private DatePicker toDateDP;
-	@FXML
-	private TextField regVarTF;
 	
 	private File smsFile;
 	private List<SMSitem> allSMSlist;
@@ -83,11 +90,17 @@ public class ParserCtrl extends AnchorPane implements Initializable {
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		fileNameLbl.setText("Незагружен");
-		regVarTF.setText(".*");
+		ObservableList<String> regexList = FXCollections.observableArrayList(Arrays.asList(".*"));
+		regexCmb.setItems(regexList);
+		regexCmb.getSelectionModel().select(0);
+		regexCmb.setDisable(true);
 		searchBtn.setDisable(true);
 		addrCmb.setDisable(true);
 		fromDateDP.setDisable(true);
 		toDateDP.setDisable(true);
+		
+		//что-бы можно было выделить фрагмент и скопировать в буфер обмена
+		fullColumn.setCellFactory(TextFieldTableCell.<SMSitem> forTableColumn());
 		
 		months.put("янв.","01");
 		months.put("февр.","02");
@@ -103,7 +116,6 @@ public class ParserCtrl extends AnchorPane implements Initializable {
 		months.put("дек.","12");
 		
 		loadBtn.setOnAction(value -> {
-			//System.out.println("loadBtn");
 			final FileChooserDirSaved fileChooser = new FileChooserDirSaved("Выбор файла СМС архива",
 					"файл СМС архива (*.xml)", "*.xml", localPrefs);
 			smsFile = fileChooser.showOpenDialog(null);
@@ -118,6 +130,7 @@ public class ParserCtrl extends AnchorPane implements Initializable {
 					searchBtn.setDisable(false);
 					fromDateDP.setDisable(false);
 					toDateDP.setDisable(false);
+					regexCmb.setDisable(false);
 					fromDateDP.setValue(getMinDate(allSMSlist));
 					toDateDP.setValue(getMaxDate(allSMSlist));
 				}
@@ -128,10 +141,15 @@ public class ParserCtrl extends AnchorPane implements Initializable {
 		});
 		
 		searchBtn.setOnAction(value -> {
-			//System.out.println("searchBtn");
 			total = 0;
 			String address = addrCmb.getSelectionModel().getSelectedItem();
-			fillTable(address, regVarTF.getText(), fromDateDP.getValue(), toDateDP.getValue());
+			String regex = regexCmb.getSelectionModel().getSelectedItem();
+			ObservableList<String> updRegexList = regexCmb.getItems();
+			if (updRegexList.stream().anyMatch(str -> !str.equals(regex))) {
+				updRegexList.add(regex);
+			}
+			regexCmb.setItems(updRegexList);
+			fillTable(address, regex, fromDateDP.getValue(), toDateDP.getValue());
 		});
 		
 		//какие колонки отображать
@@ -153,11 +171,9 @@ public class ParserCtrl extends AnchorPane implements Initializable {
 	
 	private void fillTable(String addr, String regVar, LocalDate from, LocalDate to) {
 		ObservableList<SMSitem> list = FXCollections.observableArrayList();
-		//System.out.println(regVar);
-		NumberFormat formatter = new DecimalFormat("#0.00"); 
+		NumberFormat formatter = new DecimalFormat("#0.00", new DecimalFormatSymbols(Locale.US)); 
 		
 		for(SMSitem s : allSMSlist){
-			//String addrSMS = s.addressProperty().getValue();
 			if (addr.equalsIgnoreCase(getAddress(s))) {
 				LocalDate sdate = LocalDate.parse(s.dateProperty().getValue(), DateTimeFormatter.ofPattern("dd.MM.yyyy"));
 				if(from.isAfter(sdate) || to.isBefore(sdate))
