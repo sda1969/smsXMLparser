@@ -33,7 +33,7 @@
             <TableColumn fx:id="fullColumn" editable="true" prefWidth="868.0" sortable="false" text="Полное сообщение" />
         </columns>
       </TableView>
-      <HBox layoutY="46.0" prefHeight="45.0" prefWidth="800.0" spacing="10.0">
+      <HBox layoutY="46.0" prefHeight="45.0" prefWidth="828.0" spacing="10.0">
          <children>
             <Label text="от Кого">
                <padding>
@@ -53,25 +53,28 @@
                   <Insets top="5.0" />
                </padding></Label>
             <DatePicker fx:id="toDateDP" />
+            <Button fx:id="resetBtn" mnemonicParsing="false" text="Сброс Даты" />
          </children>
          <padding>
             <Insets left="10.0" top="10.0" />
          </padding>
       </HBox>
-      <HBox layoutY="79.0" prefHeight="45.0" prefWidth="1134.0" spacing="10.0">
+      <HBox layoutY="79.0" prefHeight="45.0" prefWidth="1143.0" spacing="10.0">
          <children>
             <Button fx:id="searchBtn" mnemonicParsing="false" prefHeight="25.0" prefWidth="69.0" text="Поиск" />
-            <Label prefHeight="25.0" prefWidth="178.0" text="Регулярное выражение:">
+            <Label prefHeight="25.0" prefWidth="171.0" text="Регулярное выражение:">
                <padding>
                   <Insets top="4.0" />
                </padding>
             </Label>
-            <ComboBox fx:id="regexCmb" editable="true" prefHeight="25.0" prefWidth="858.0" />
+            <ComboBox fx:id="regexCmb" editable="true" prefHeight="25.0" prefWidth="672.0" />
+            <Button fx:id="delRegExBtn" mnemonicParsing="false" text="Удалить" />
+            <Button fx:id="saveRegExBtn" mnemonicParsing="false" text="Сохранить" />
          </children>
          <padding>
             <Insets left="10.0" top="10.0" />
          </padding>
       </HBox>
-      <Separator layoutX="-10.0" layoutY="126.0" prefHeight="5.0" prefWidth="800.0" />
+      <Separator layoutX="-10.0" layoutY="127.0" prefHeight="4.0" prefWidth="1156.0" />
    </children>
 </AnchorPane>
